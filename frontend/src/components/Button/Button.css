@@ -1,0 +1,31 @@
+.game-button {
+    background: #1b2635;
+    color: #b9dcff;
+    border: 3px solid #61a5fa;
+    padding: 14px 28px;
+    font-family: "Press Start 2P", monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    image-rendering: pixelated;
+    box-shadow:
+        4px 4px 0px #0b1118,
+        6px 6px 0px #425164;
+    transition: none;
+}
+
+
+.game-button:hover {
+    background: #61a5fa;
+    color: #0b1118;
+    box-shadow:
+        2px 2px 0px #0b1118,
+        4px 4px 0px #425164;
+    transform: translate(2px, 2px);
+}
+
+
+.game-button:active {
+    transform: translate(5px, 5px);
+    box-shadow: 0px 0px 0px #0b1118;
+}
