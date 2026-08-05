@@ -6,7 +6,7 @@ from backend.app.auth.dependencies import get_current_user
 from backend.app.game.player import Player
 from backend.rooms.manager import Manager
 
-router = APIRouter(prefix="/room", tags=["Rooms"])
+router = APIRouter(prefix="/rooms", tags=["Rooms"])
 
 manager = Manager()
 

@@ -23,7 +23,7 @@ class Manager:
 
         game = Game(room_code)  # create game
         self.rooms[room_code] = game
-        self.user_to_room[player.id] = room_code
+        self.user_to_room[player.user_id] = room_code
 
         game.add_player(player)  # add player a
 
@@ -34,7 +34,7 @@ class Manager:
         if room_code in self.rooms:
             game =  self.rooms[room_code] # get the game
             game.add_player(player) # add player b
-            self.user_to_room[player.id] = room_code
+            self.user_to_room[player.user_id] = room_code
         else:
             raise RoomNotFoundError(f"Room '{room_code}' does not exist.")
 
