@@ -1,0 +1,58 @@
+.register-container {
+    min-height: 100vh;
+    background: #080d14;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.register-card {
+    width: 380px;
+    background: #151f2b;
+    border: 4px solid #61a5fa;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow:
+        8px 8px 0px #05080d,
+        12px 12px 0px #425164;
+}
+
+
+.register-card h1 {
+    color: #61a5fa;
+    font-family: "Press Start 2P", monospace;
+    font-size: 26px;
+    text-align: center;
+}
+
+
+.register-card label {
+    color: #b9dcff;
+    font-family: "Press Start 2P", monospace;
+    font-size: 10px;
+}
+
+
+.register-card input {
+    background: #080d14;
+    border: 3px solid #425164;
+    padding: 12px;
+    color: white;
+}
+
+
+.login-text {
+    text-align: center;
+    color: #b9dcff;
+    font-family: "Press Start 2P", monospace;
+    font-size: 9px;
+}
+
+
+.login-text a {
+    color: #61a5fa;
+    text-decoration: none;
+}
