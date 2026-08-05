@@ -1,0 +1,23 @@
+# Python backend
+venv/
+.env
+__pycache__/
+*.pyc
+
+
+# React frontend
+node_modules/
+dist/
+
+
+# Logs
+*.log
+
+
+# IDE
+.vscode/
+.idea/
+
+
+# OS
+.DS_Store
