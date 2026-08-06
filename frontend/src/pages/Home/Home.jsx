@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { createRoom } from '../../services/api';
 import Button from "../../components/Button/Button";
 import "./Home.css";
 
@@ -7,14 +9,37 @@ import "./Home.css";
 function Home() {
     const navigate = useNavigate();
     const [roomCode, setRoomCode] = useState("");
+    const [createdRoomCode, setCreatedRoomCode] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (token === null) {
             // console.log("No token, redirecting");
             navigate("/");
         }
     }, []);
+
+    async function handleCopyCode(){
+        await navigator.clipboard.writeText(createdRoomCode);  // a browser api functionality
+        alert('Room Code Copied!');
+    }
+
+    async function handleCreateRoom(){
+        try {
+            const token = localStorage.getItem('token');
+            console.log(token);
+            const response = await createRoom(token);
+
+            if(response.ok){
+                const data = await response.json();
+                setCreatedRoomCode(data.room_code);
+            }
+        }
+         catch(error){
+            console.error(error);
+        }
+    }
+
 
     return (
 
@@ -26,7 +51,15 @@ function Home() {
 
                 <h2>PLAYER MENU</h2>
 
-                <Button text="CREATE ROOM" />
+                <Button text="CREATE ROOM" onClick={handleCreateRoom}/>
+
+                {createdRoomCode && (
+                    <div className="home-room">
+                        <p>Your Room Code:</p>
+                        <h2>{createdRoomCode}</h2>
+                        <Button text='COPY CODE' onClick={handleCopyCode} small={true} />
+                    </div>
+                )}
 
                 <div className="divider">OR</div>
 
@@ -40,7 +73,6 @@ function Home() {
                     onChange={(event)=>setRoomCode(event.target.value)}
                 />
 
-
                 <Button text="JOIN ROOM" />
 
             </div>
@@ -49,6 +81,5 @@ function Home() {
 
     );
 }
-
 
 export default Home;

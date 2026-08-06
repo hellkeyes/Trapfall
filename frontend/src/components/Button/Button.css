@@ -14,6 +14,10 @@
     transition: none;
 }
 
+.small {
+    padding: 6px 12px;
+    font-size: 9px;
+}
 
 .game-button:hover {
     background: #61a5fa;
@@ -29,3 +33,4 @@
     transform: translate(5px, 5px);
     box-shadow: 0px 0px 0px #0b1118;
 }
+

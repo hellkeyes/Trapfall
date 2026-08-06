@@ -25,3 +25,15 @@ export async function loginUser(userData){
 
     return response;
 }
+
+
+export async function createRoom(token){
+    const response = await fetch(`${BASE_URL}/rooms/create`,{
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return response
+}

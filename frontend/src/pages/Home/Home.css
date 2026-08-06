@@ -36,6 +36,23 @@
     text-align:center;
 }
 
+.home-room p{
+    padding-top: 20px;
+}
+
+.home-room p{
+    color:#61a5fa;
+    font-family:"Press Start 2P", monospace;
+    font-size:12px;
+    text-align:center;
+}
+
+.home-room h2{
+    color:#b9dcff;
+    font-family:"Press Start 2P", monospace;
+    font-size:10px;
+    text-align:center;
+}
 
 .home-card label {
     color:#b9dcff;
