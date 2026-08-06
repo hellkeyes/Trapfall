@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { createRoom } from '../../services/api';
+import { createRoom, joinRoom } from '../../services/api';
 import Button from "../../components/Button/Button";
 import "./Home.css";
 
@@ -33,6 +33,24 @@ function Home() {
             if(response.ok){
                 const data = await response.json();
                 setCreatedRoomCode(data.room_code);
+            }
+        }
+         catch(error){
+            console.error(error);
+        }
+    }
+
+    async function handleJoinRoom(){
+        try {
+            const token = localStorage.getItem('token');
+            const response = await joinRoom(roomCode, token)
+
+            if(response.ok){
+                navigate('/lobby');
+            }
+            else {
+            const error = await response.json();
+            alert(error.detail);
             }
         }
          catch(error){
@@ -73,7 +91,7 @@ function Home() {
                     onChange={(event)=>setRoomCode(event.target.value)}
                 />
 
-                <Button text="JOIN ROOM" />
+                <Button text="JOIN ROOM" onClick={handleJoinRoom} />
 
             </div>
 
