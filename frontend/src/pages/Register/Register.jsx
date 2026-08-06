@@ -1,14 +1,46 @@
 import { useState } from 'react';
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../services/api";
 import Button from "../../components/Button/Button";
 import "./Register.css";
 
 function Register() {
+  const navigate = useNavigate();
+  
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+
+    async function handleRegister(){
+        if (password !== confirmPassword){
+            alert('Passwords do not match');
+            return;
+        }
+
+        try {
+            const response = await registerUser({
+                username,
+                email,
+                password,
+            });
+
+            if (response.ok) {
+                alert('Registration successful!');
+                navigate("/")
+            }
+            else {
+                const error = await response.json();
+                alert(error.detail);
+            }
+        }
+
+        catch(error) {
+            console.error(error);
+            alert('server error.');
+        }
+    }
 
     return (
         <div className="register-container">
@@ -56,7 +88,7 @@ function Register() {
                 />
 
 
-                <Button text="REGISTER" />
+                <Button text="REGISTER"  onClick={handleRegister} />
 
                 <p className="login-text">Already a player? <Link to="/">Login</Link></p>
 
@@ -69,3 +101,4 @@ function Register() {
 
 
 export default Register;
+

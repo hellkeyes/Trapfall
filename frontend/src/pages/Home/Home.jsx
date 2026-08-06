@@ -1,12 +1,20 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import "./Home.css";
 
 
 function Home() {
-
+    const navigate = useNavigate();
     const [roomCode, setRoomCode] = useState("");
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token === null) {
+            // console.log("No token, redirecting");
+            navigate("/");
+        }
+    }, []);
 
     return (
 
