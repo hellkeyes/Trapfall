@@ -35,6 +35,7 @@ class Manager:
             game =  self.rooms[room_code] # get the game
             game.add_player(player) # add player b
             self.user_to_room[player.user_id] = room_code
+            return game
         else:
             raise RoomNotFoundError(f"Room '{room_code}' does not exist.")
 

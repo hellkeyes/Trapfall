@@ -8,4 +8,4 @@ async def handle_message(user_id, data):
     if message_type == 'MOVE':
         event = game.move_player(user_id, data)
 
-        await connection_manager.broadcast_to_room(game, event)
+        await connection_manager.broadcast_to_room(game.room_code, event)

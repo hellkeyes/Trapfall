@@ -49,3 +49,16 @@ export async function joinRoom(roomCode, token){
     });
     return response
 }
+
+export async function getRoom(roomCode, token){
+
+    const response = await fetch(`${BASE_URL}/rooms/${roomCode}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    });
+
+    return response;
+}

@@ -19,11 +19,6 @@ function Home() {
         }
     }, []);
 
-    async function handleCopyCode(){
-        await navigator.clipboard.writeText(createdRoomCode);  // a browser api functionality
-        alert('Room Code Copied!');
-    }
-
     async function handleCreateRoom(){
         try {
             const token = localStorage.getItem('token');
@@ -32,7 +27,7 @@ function Home() {
 
             if(response.ok){
                 const data = await response.json();
-                setCreatedRoomCode(data.room_code);
+                navigate(`/rooms/${data.room_code}`);
             }
         }
          catch(error){
@@ -46,7 +41,7 @@ function Home() {
             const response = await joinRoom(roomCode, token)
 
             if(response.ok){
-                navigate('/lobby');
+                navigate(`/rooms/${roomCode}`);
             }
             else {
             const error = await response.json();
@@ -70,14 +65,6 @@ function Home() {
                 <h2>PLAYER MENU</h2>
 
                 <Button text="CREATE ROOM" onClick={handleCreateRoom}/>
-
-                {createdRoomCode && (
-                    <div className="home-room">
-                        <p>Your Room Code:</p>
-                        <h2>{createdRoomCode}</h2>
-                        <Button text='COPY CODE' onClick={handleCopyCode} small={true} />
-                    </div>
-                )}
 
                 <div className="divider">OR</div>
 
