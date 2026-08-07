@@ -1,0 +1,13 @@
+.game-container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+
+.game-card{
+    padding:40px;
+    border:2px solid black;
+    text-align:center;
+}

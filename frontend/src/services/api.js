@@ -62,3 +62,16 @@ export async function getRoom(roomCode, token){
 
     return response;
 }
+
+export async function startGame(roomCode, token){
+
+    const response = await fetch(`${BASE_URL}/rooms/${roomCode}/game`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    });
+
+    return response;
+}

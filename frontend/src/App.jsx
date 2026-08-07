@@ -4,7 +4,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Lobby from "./pages/Lobby/Lobby";
-
+import Game from "./pages/Game/Game";
 
 function App() {
 
@@ -20,6 +20,8 @@ function App() {
         <Route path="/home" element={<Home />} />
 
         <Route path="/rooms/:roomCode" element={<Lobby />} />
+
+        <Route path="/rooms/:roomCode/game" element={<Game />} />
 
       </Routes>
 

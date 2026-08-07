@@ -47,8 +47,8 @@ async def join_room(room_code: str, current_user: User = Depends(get_current_use
 
     return {"message": "Joined room"}
 
-@router.post("/{room_code}/start")
-def start_room(room_code: str, current_user: User = Depends(get_current_user)):
+@router.get("/{room_code}/game")
+async def start_room(room_code: str, current_user: User = Depends(get_current_user)):
     game = manager.rooms.get(room_code)
 
     if game is None:
@@ -58,6 +58,13 @@ def start_room(room_code: str, current_user: User = Depends(get_current_user)):
         return {"message": "Both players must join before the game can start."}
 
     game.phase = "PLAYING"
+
+    await connection_manager.broadcast_to_room(
+        room_code,
+        {
+            "type":"GAME_STARTED"
+        }
+    )
 
     return {"message": "Game started."}
 

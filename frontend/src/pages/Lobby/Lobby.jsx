@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { getRoom } from "../../services/api";
+import { getRoom, startGame } from "../../services/api";
 import Button from "../../components/Button/Button";
 import "./Lobby.css";
 
 
 function Lobby(){
-
+    const navigate = useNavigate();
     const { roomCode } = useParams();
     const [room, setRoom] = useState(null);
 
@@ -15,6 +15,22 @@ function Lobby(){
         await navigator.clipboard.writeText(room.room_code);
         alert("Room Code Copied!");
     }
+
+    async function handleStartGame(){
+        try {
+            const token = localStorage.getItem("token");
+            const response = await startGame(roomCode, token);
+
+            if(!response.ok){
+            const error = await response.json();
+            alert(error.detail);
+            }
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+
 
     useEffect(() => {
 
@@ -48,10 +64,6 @@ function Lobby(){
 
         socket.onopen = () => {
             console.log("WebSocket connected");
-
-            socket.send(JSON.stringify({
-                type:"JOIN_LOBBY"
-            }));
         };
 
         socket.onmessage = (event) => {
@@ -60,6 +72,10 @@ function Lobby(){
 
             if(data.type === "ROOM_UPDATED"){
                 setRoom(data.room);
+            }
+
+            if(data.type === "GAME_STARTED"){
+                navigate(`/rooms/${roomCode}/game`);
             }
         };
 
@@ -143,7 +159,7 @@ function Lobby(){
 
                     <div className="start-button">
 
-                        <Button text="START GAME" />
+                        <Button text="START GAME" onClick={handleStartGame}/>
 
                     </div>
 
