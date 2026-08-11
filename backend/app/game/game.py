@@ -37,24 +37,50 @@ class Game:
 
     
     def move_player(self, user_id, data):
-        if self.player_a and self.player_a.id == user_id:
+        if self.player_a and self.player_a.user_id == user_id:
             player = self.player_a
 
-        elif self.player_b and self.player_b.id == user_id:
+        elif self.player_b and self.player_b.user_id == user_id:
             player = self.player_b
 
         else:
             raise Exception("Player not found")
 
-        new_position = (data["position"]["x"],data["position"]["y"]) #get current position
+        direction = data["direction"]
 
         old_x, old_y = player.position
-        new_x, new_y = new_position
 
-        if abs(new_x-old_x) > 1 or abs(new_y-old_y) > 1:   # find if move is more than 1 block
-            raise InvalidMove("Invalid move")
+        if direction == "UP":
+            new_x = old_x
+            new_y = old_y - 1
 
-        player.position = new_position
+        elif direction == "DOWN":
+            new_x = old_x
+            new_y = old_y + 1
+
+        elif direction == "LEFT":
+            new_x = old_x - 1
+            new_y = old_y
+
+        elif direction == "RIGHT":
+            new_x = old_x + 1
+            new_y = old_y
+
+        else:
+            raise InvalidMove("Invalid direction")
+
+        # new_position = (data["position"]["x"],data["position"]["y"]) #get current position
+
+        # old_x, old_y = player.position
+        # new_x, new_y = new_position
+
+        # if abs(new_x-old_x) > 1 or abs(new_y-old_y) > 1:   # find if move is more than 1 block
+        #     raise InvalidMove("Invalid move")
+
+        if not (0 <= new_x < 10 and 0 <= new_y < 10):    # Check if its within the boundary
+            raise InvalidMove("Outside board")
+
+        player.position = (new_x, new_y)
 
         return {
         "type": "PLAYER_MOVED",

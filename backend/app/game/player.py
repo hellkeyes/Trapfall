@@ -15,3 +15,5 @@ class Player:
         self.lives = 3
 
         self.alive = True
+
+        self.history = []

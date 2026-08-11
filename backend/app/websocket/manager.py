@@ -36,14 +36,6 @@ class ConnectionManager:  #only job here is to maintain connection
         if websocket:
             await websocket.send_json(message)
 
-    
-    # async def broadcast_to_room(self, room_code, message: dict):
-    #     sockets = self.room_connections.get(room_code, {})
-
-    #     for websocket in sockets.values():
-    #         await websocket.send_json(message)
-
-
     async def broadcast_to_room(self, room_code, message):
 
         print("Broadcasting to:", room_code)

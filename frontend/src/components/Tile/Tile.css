@@ -1,0 +1,62 @@
+.tile{
+
+    width:48px;
+    height:48px;
+
+    background:#182230;
+
+    border:2px solid #425164;
+
+    cursor:pointer;
+
+    transition:.1s;
+
+    color: #61a5fa;
+    font-family: "Press Start 2P", monospace;
+    font-size: 18px;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.tile:hover{
+
+    background:#27405e;
+}
+
+.tile.player{
+
+    background:#61a5fa;
+}
+
+.tile.enemy{
+
+    background:#f16d6d;
+}
+
+.tile.trap{
+
+    background:#d7a548;
+}
+
+.tile.revealed{
+
+    background:#425164;
+}
+
+.tile.player {
+    background: #61a5fa;
+}
+
+.tile.enemy {
+    background: #f16d6d;
+}
+
+.tile.player,
+.tile.enemy {
+    color: #080d14;
+    text-shadow: 2px 2px 0px #05080d;
+}

@@ -1,13 +1,99 @@
 .game-container{
-    height:100vh;
+    min-height:100vh;
+    background:#080d14;
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
-
 .game-card{
-    padding:40px;
-    border:2px solid black;
+    width:1200px;
+    background:#151f2b;
+    border:4px solid #61a5fa;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    box-shadow:
+        8px 8px 0 #05080d,
+        12px 12px 0 #425164;
+}
+
+
+.game-title{
+    font-family:"Press Start 2P", monospace;
+    color:#61a5fa;
     text-align:center;
+    font-size:24px;
+    margin:0;
+}
+
+.game-info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#080d14;
+    border:3px solid #425164;
+    padding:16px;
+    box-shadow:4px 4px 0 #05080d;
+}
+
+.game-info span{
+    font-family:"Press Start 2P", monospace;
+    font-size:8px;
+    color:#b9dcff;
+}
+
+.game-layout{
+    display:flex;
+    gap:20px;
+}
+
+.board{
+    flex:1;
+    background:#080d14;
+    border:3px solid #425164;
+    padding:16px;
+    box-shadow:4px 4px 0 #05080d;
+    display:grid;
+    justify-content:center;
+    grid-template-columns:repeat(10,50px);
+    grid-template-rows:repeat(10,50px);
+    gap:4px;
+}
+
+.sidebar{
+    width:260px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.sidebar-box{
+    background:#080d14;
+    border:3px solid #425164;
+    padding:16px;
+    box-shadow:4px 4px 0 #05080d;
+}
+
+.sidebar-title{
+    color:#61a5fa;
+    font-family:"Press Start 2P", monospace;
+    font-size:8px;
+    margin-bottom:16px;
+}
+
+.sidebar-text{
+    color:white;
+    font-family:monospace;
+    font-size:15px;
+    margin:10px 0;
+}
+
+.timer{
+    color:#61a5fa;
+    font-family:"Press Start 2P", monospace;
+    font-size:20px;
+    text-align:center;
+    text-shadow:2px 2px #05080d;
 }

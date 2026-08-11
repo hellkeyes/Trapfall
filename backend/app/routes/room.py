@@ -62,7 +62,17 @@ async def start_room(room_code: str, current_user: User = Depends(get_current_us
     await connection_manager.broadcast_to_room(
         room_code,
         {
-            "type":"GAME_STARTED"
+            "type": "GAME_STARTED",
+            "player_a": {
+                "id": game.player_a.user_id,
+                "x": 0,
+                "y": 0
+            },
+            "player_b": {
+                "id": game.player_b.user_id,
+                "x": 9,
+                "y": 9
+            }
         }
     )
 

@@ -5,8 +5,6 @@ from backend.app.websocket.handlers import handle_message
 from backend.app.auth.jwt import decode_access_token
 from backend.rooms.manager import manager
 
-import asyncio
-
 
 router = APIRouter(tags=["WebSocket"])
 
@@ -63,14 +61,31 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
 
     await connection_manager.connect(user_id, websocket, room_code)
 
+    # await websocket.send_json({
+    #     "type": "GAME_STATE",
+    #     "player_a": {
+    #         "id": game.player_a.user_id,
+    #         "x": game.player_a.position[0],
+    #         "y": game.player_a.position[1]
+    #     },
+    #     "player_b": {
+    #         "id": game.player_b.user_id,
+    #         "x": game.player_b.position[0],
+    #         "y": game.player_b.position[1]
+    #     }
+    # })
 
     try:
         while True:
-            await asyncio.sleep(60)
-            # later: we add :
-            # movement
-            # traps
-            # ready button
+            data = await websocket.receive_json()
+
+            print("RECEIVED:", data)
+
+            try:
+                await handle_message(user_id, data, websocket)
+
+            except Exception as e:
+                print("MESSAGE ERROR:", repr(e))
 
     except WebSocketDisconnect:
         await connection_manager.disconnect(
