@@ -11,6 +11,7 @@ async def handle_message(user_id, data, websocket):
         you_are = "B"
 
     if message_type == "GET_GAME_STATE":
+        print("SENDING DEADLINE:", game.phase_ends_at)
         await websocket.send_json({
             "type": "GAME_STATE",
 
@@ -28,7 +29,9 @@ async def handle_message(user_id, data, websocket):
 
             "you_are": you_are,
             "current_turn": game.current_turn,
-            "traps": game.traps
+            "traps": game.traps,
+            "phase": game.phase,
+            "phase_ends_at": game.phase_ends_at
         })
 
     elif message_type == 'PLACE_TRAP':

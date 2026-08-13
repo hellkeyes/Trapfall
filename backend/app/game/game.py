@@ -1,4 +1,5 @@
 from backend.app.game.board import Board
+import time
 
 class Game:
     def __init__(self, room_code):
@@ -14,9 +15,11 @@ class Game:
 
         self.traps = []   # requires coordiante and owner (x, y) : user_id
 
-        self.current_turn = 'A'
+        self.current_turn = None
 
-        self.turn_started_at = None
+        self.phase_ends_at = None
+
+        # self.turn_started_at = None
 
         self.winner = None
 
@@ -36,6 +39,10 @@ class Game:
 
     def start_game(self):
         self.phase = "TRAP_PLACEMENT"
+        self.current_turn = "A"
+        self.phase_ends_at = time.time() + 60
+        print("PHASE ENDS AT:", self.phase_ends_at)
+
 
     def place_trap(self, user_id, data):
         print("PLACE TRAP DATA:", data)

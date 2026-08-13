@@ -19,6 +19,10 @@ function Game(){
     
     const [traps, setTraps] = useState([]); // collect all traps
 
+    const [timer, setTimer] = useState(60);
+
+    const [phaseEndsAt, setPhaseEndsAt] = useState(null);
+
     const myPlayerSide = players.current_turn;
 
     useEffect(() => {
@@ -51,6 +55,8 @@ function Game(){
                 });
 
                 setTraps(data.traps);
+
+                setPhaseEndsAt(data.phase_ends_at);
 
                 return;
             }
@@ -194,6 +200,32 @@ function Game(){
 
     }, []);
 
+    useEffect(() => {
+
+        console.log("TIMER EFFECT RAN");
+        console.log("PHASE ENDS AT:", phaseEndsAt);
+
+        if (!phaseEndsAt) {
+            console.log("NO PHASE END TIME YET");
+            return;
+        }
+
+
+        const interval = setInterval(() => {
+
+            const remaining = Math.ceil(
+                phaseEndsAt - Date.now() / 1000
+            );
+
+            console.log("REMAINING:", remaining);
+
+            setTimer(Math.max(0, remaining));
+
+        }, 1000);
+
+        return () => clearInterval(interval);
+
+    }, [phaseEndsAt]);
 
 
   return (
@@ -209,7 +241,7 @@ function Game(){
                     
                     <span>PHASE : TRAP PLACEMENT</span>
 
-                    <span>TIMER : 60s</span>
+                    {/* <span>TIMER : {timer}</span> */}
 
                 </div>
 
@@ -287,7 +319,7 @@ function Game(){
                             </div>
 
                             <div className="timer">
-                                60
+                                {timer}
                             </div>
 
                         </div>
