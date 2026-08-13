@@ -37,9 +37,12 @@
     background:#f16d6d;
 }
 
-.tile.trap{
-
-    background:#d7a548;
+.tile.trap {
+    background: radial-gradient(circle, #ff4d4d 0%, #b30000 55%, #4a0000 100%);
+    box-shadow:
+        0 0 8px rgba(194, 10, 10, 0.8),
+        0 0 18px rgba(109, 4, 4, 0.5);
+    border: 1px solid #ff6666;
 }
 
 .tile.revealed{

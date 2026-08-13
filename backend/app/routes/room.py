@@ -57,7 +57,7 @@ async def start_room(room_code: str, current_user: User = Depends(get_current_us
     if game.player_a is None or game.player_b is None:
         return {"message": "Both players must join before the game can start."}
 
-    game.phase = "PLAYING"
+    game.start_game()
 
     await connection_manager.broadcast_to_room(
         room_code,

@@ -12,7 +12,9 @@ class Game:
 
         self.phase = 'WAITING'
 
-        self.current_turn = None
+        self.traps = []   # requires coordiante and owner (x, y) : user_id
+
+        self.current_turn = 'A'
 
         self.turn_started_at = None
 
@@ -33,18 +35,50 @@ class Game:
 
 
     def start_game(self):
-        self.phase = 'TRAP_PLACEMENT'
+        self.phase = "TRAP_PLACEMENT"
 
-    
+    def place_trap(self, user_id, data):
+        print("PLACE TRAP DATA:", data)
+        if self.phase != "TRAP_PLACEMENT":
+            raise InvalidPhase("You cannot place traps now.")
+
+        x = data["position"]["x"]
+        y = data["position"]["y"]
+
+        if not (0 <= x < 10 and 0 <= y < 10):
+            raise InvalidMove("Outside board")
+
+        player_traps = sum(1 for trap in self.traps if trap['owner'] == user_id)
+
+        if player_traps >= 8:
+            raise InvalidMove("You already placed 8 traps.")
+
+        self.traps.append({"x": x, "y": y, "owner": user_id})
+
+        return {
+            "type": "TRAP_PLACED",
+            "player_id": user_id,
+            "position": {
+                "x": x,
+                "y": y
+            }
+        }
+        
+
     def move_player(self, user_id, data):
         if self.player_a and self.player_a.user_id == user_id:
             player = self.player_a
+            player_side = "A"
 
         elif self.player_b and self.player_b.user_id == user_id:
             player = self.player_b
+            player_side = "B"
 
         else:
             raise Exception("Player not found")
+
+        if player_side != self.current_turn:
+            raise InvalidMove("Not your turn")
 
         direction = data["direction"]
 
@@ -69,18 +103,15 @@ class Game:
         else:
             raise InvalidMove("Invalid direction")
 
-        # new_position = (data["position"]["x"],data["position"]["y"]) #get current position
-
-        # old_x, old_y = player.position
-        # new_x, new_y = new_position
-
-        # if abs(new_x-old_x) > 1 or abs(new_y-old_y) > 1:   # find if move is more than 1 block
-        #     raise InvalidMove("Invalid move")
-
         if not (0 <= new_x < 10 and 0 <= new_y < 10):    # Check if its within the boundary
             raise InvalidMove("Outside board")
 
         player.position = (new_x, new_y)
+
+        if self.current_turn == "A":
+            self.current_turn = "B"
+        else:
+            self.current_turn = "A"
 
         return {
         "type": "PLAYER_MOVED",
@@ -88,7 +119,8 @@ class Game:
         "position": {
             "x": player.position[0],
             "y": player.position[1]
-            }
+            },
+        "current_turn": self.current_turn
         }
 
 
@@ -96,4 +128,7 @@ class RoomIsOccupied(Exception):
     pass
 
 class InvalidMove(Exception):
+    pass
+
+class InvalidPhase(Exception):
     pass

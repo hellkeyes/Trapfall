@@ -61,20 +61,6 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
 
     await connection_manager.connect(user_id, websocket, room_code)
 
-    # await websocket.send_json({
-    #     "type": "GAME_STATE",
-    #     "player_a": {
-    #         "id": game.player_a.user_id,
-    #         "x": game.player_a.position[0],
-    #         "y": game.player_a.position[1]
-    #     },
-    #     "player_b": {
-    #         "id": game.player_b.user_id,
-    #         "x": game.player_b.position[0],
-    #         "y": game.player_b.position[1]
-    #     }
-    # })
-
     try:
         while True:
             data = await websocket.receive_json()
@@ -86,6 +72,11 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
 
             except Exception as e:
                 print("MESSAGE ERROR:", repr(e))
+
+                await websocket.send_json({
+                    "type": "ERROR",
+                    "message": str(e)
+                })
 
     except WebSocketDisconnect:
         await connection_manager.disconnect(

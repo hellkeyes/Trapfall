@@ -12,9 +12,14 @@ function Game(){
 
     const [players, setPlayers] = useState({
         player_a: {id: null, x: 0, y: 0 },  //position of a
-        player_b: {id: null, x: 9, y: 9 }   //position of b
-    });                            // player state
+        player_b: {id: null, x: 9, y: 9 },  //position of b
+        current_turn: null,
+        you_are: null  // player state
+    });      
+    
+    const [traps, setTraps] = useState([]); // collect all traps
 
+    const myPlayerSide = players.current_turn;
 
     useEffect(() => {
 
@@ -40,8 +45,12 @@ function Game(){
                 console.log("SETTING INITIAL PLAYERS");
                 setPlayers({
                     player_a: data.player_a,
-                    player_b: data.player_b
+                    player_b: data.player_b,
+                    current_turn: data.current_turn,
+                    you_are: data.you_are
                 });
+
+                setTraps(data.traps);
 
                 return;
             }
@@ -88,8 +97,26 @@ function Game(){
                     return prev;
                 });
             }
+
+            if (data.type === "TRAP_PLACED") {
+                console.log("Trap placement");
+                setTraps(prev => [
+                    ...prev,
+                    {
+                        x: data.position.x,
+                        y: data.position.y,
+                        owner: data.player_id
+                    }
+                ]) 
             }
-            
+
+            if (data.type === "ERROR") {
+                alert(data.message);
+            }
+
+
+            }
+
             socketRef.current.onclose = () => {
                 console.log("WebSocket disconnected");
             };
@@ -101,6 +128,22 @@ function Game(){
 
         
     }, []);
+
+    function handleTileClick(row, col){
+        try {
+            socketRef.current.send(JSON.stringify({
+                type: "PLACE_TRAP",
+                position: {
+                    x: col,
+                    y: row
+                }
+            }));
+
+        }
+         catch(error){
+            console.error(error);
+        }  
+    }
 
     useEffect(() => {                 // see which key is pressed
         function handleKeyDown(event) {
@@ -179,7 +222,9 @@ function Game(){
                                 <Tile key={index}
                                     index={index}
                                     player_a={players.player_a}
-                                    player_b={players.player_b}/>             // giving index so react knows which tile changes
+                                    player_b={players.player_b}
+                                    onClick={handleTileClick}
+                                    traps={traps}   />             // giving index so react knows which tile changes
                             ))
                         }
                     </div>
@@ -199,7 +244,7 @@ function Game(){
                             </div>
 
                             <div className="sidebar-text">
-                                Turn : YOU
+                                Turn: {players.current_turn === players.you_are ? "YOU" : "OPPONENT"}
                             </div>
 
                         </div>

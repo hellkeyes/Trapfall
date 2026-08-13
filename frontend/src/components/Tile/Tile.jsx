@@ -1,15 +1,6 @@
 import "./Tile.css";
 
-function Tile({ index, player_a, player_b }) {
-
-    console.log(
-    "TILE",
-    index,
-    "A:",
-    player_a,
-    "B:",
-    player_b
-     );
+function Tile({ index, player_a, player_b, onClick, traps  }) {
 
     const row = Math.floor(index / 10);    // giving tiles number 
     const col = index % 10;
@@ -24,8 +15,14 @@ function Tile({ index, player_a, player_b }) {
         player = 'B';
     }
 
+    const trap = traps.find(
+        trap => trap.x === col && trap.y === row);
+
     return (
-        <div className ={` tile ${player === 'A' ? 'player' : ''} ${player === 'B' ? 'enemy' : ''}`}>
+        <div className ={` tile ${player === 'A' ? 'player' : ''} 
+                                ${player === 'B' ? 'enemy' : ''}
+                                ${trap ? 'trap': ''}`}
+                            onClick={() => onClick(row, col)}>
             {player}
         </div>
     );
