@@ -1,5 +1,7 @@
 from backend.app.game.board import Board
 import time
+import asyncio
+from backend.app.websocket.manager import connection_manager
 
 class Game:
     def __init__(self, room_code):
@@ -41,7 +43,8 @@ class Game:
         self.phase = "TRAP_PLACEMENT"
         self.current_turn = "A"
         self.phase_ends_at = time.time() + 60
-        print("PHASE ENDS AT:", self.phase_ends_at)
+        print("NEW DEADLINE:", self.phase_ends_at)
+        asyncio.create_task(self.phase_timer())
 
 
     def place_trap(self, user_id, data):
@@ -73,6 +76,10 @@ class Game:
         
 
     def move_player(self, user_id, data):
+
+        if self.phase != "MOVEMENT":
+            raise InvalidPhase("You cannot move right now.")
+
         if self.player_a and self.player_a.user_id == user_id:
             player = self.player_a
             player_side = "A"
@@ -130,6 +137,44 @@ class Game:
         "current_turn": self.current_turn
         }
 
+    async def phase_timer(self):
+        print("PHASE TIMER STARTED")
+        print("INITIAL DEADLINE:", self.phase_ends_at)
+
+        while True:
+            if self.phase_ends_at is not None and time.time() >= self.phase_ends_at:
+
+                if self.phase == "TRAP_PLACEMENT":
+                    self.phase = "MEMORIZE"
+                    self.phase_ends_at = time.time() + 15
+
+                    print("PHASE TIMER:", self.phase_ends_at)
+
+                    await connection_manager.broadcast_to_room(
+                        self.room_code,
+                        {
+                            "type": "PHASE_CHANGED",
+                            "phase": self.phase,
+                            "phase_ends_at": self.phase_ends_at
+                        }
+                    )
+
+                elif self.phase == "MEMORIZE":
+                    self.phase = "MOVEMENT"
+                    self.phase_ends_at = None
+
+                    print("PHASE TIMER:", self.phase_ends_at)
+
+                    await connection_manager.broadcast_to_room(
+                        self.room_code,
+                        {
+                            "type": "PHASE_CHANGED",
+                            "phase": self.phase,
+                            "phase_ends_at": self.phase_ends_at
+                        }
+                    )
+
+            await asyncio.sleep(1)
 
 class RoomIsOccupied(Exception):
     pass

@@ -18,16 +18,19 @@ def create_room(current_user: User = Depends(get_current_user)):
     return {'room_code': room_code}
 
 
-@router.post("/{room_code}/join")
+@router.post("/{room_code}/join")   # when i join exisitin room
 async def join_room(room_code: str, current_user: User = Depends(get_current_user)):
 
     game = manager.rooms.get(room_code)
 
     if game is None:
         raise HTTPException(status_code=404, detail="Room doesn't exist")
+    # Existing player reconnecting
+    if (game.player_a and game.player_a.user_id == current_user.id):
+        return {"message": "Reconnected"}
 
-    if game.player_a and game.player_a.user_id == current_user.id:
-        raise HTTPException(status_code=400,detail="You cannot join your own room")
+    if (game.player_b and game.player_b.user_id == current_user.id):
+        return {"message": "Reconnected"}
 
     player = Player(user_id=current_user.id, username = current_user.username)
 
@@ -47,7 +50,8 @@ async def join_room(room_code: str, current_user: User = Depends(get_current_use
 
     return {"message": "Joined room"}
 
-@router.get("/{room_code}/game")
+
+@router.get("/{room_code}/game")    # start the game and broadcast message 
 async def start_room(room_code: str, current_user: User = Depends(get_current_user)):
     game = manager.rooms.get(room_code)
 
@@ -56,6 +60,9 @@ async def start_room(room_code: str, current_user: User = Depends(get_current_us
 
     if game.player_a is None or game.player_b is None:
         return {"message": "Both players must join before the game can start."}
+
+    if game.phase != "WAITING":
+        raise HTTPException( status_code=400, detail="Game has already started")
 
     game.start_game()
 
@@ -79,7 +86,7 @@ async def start_room(room_code: str, current_user: User = Depends(get_current_us
     return {"message": "Game started."}
 
 
-@router.get('/{room_code}')
+@router.get('/{room_code}')          # for the lobby 
 def get_room(room_code: str):
     game = manager.rooms.get(room_code)
 

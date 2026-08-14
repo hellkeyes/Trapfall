@@ -121,7 +121,7 @@ function Lobby(){
                         <div className="player-row">
 
                             <span className="player-label">
-                                PLAYER 1
+                                PLAYER A
                             </span>
 
 
@@ -135,7 +135,7 @@ function Lobby(){
                         <div className="player-row">
 
                             <span className="player-label">
-                                PLAYER 2
+                                PLAYER B  
                             </span>
 
 

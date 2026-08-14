@@ -1,6 +1,6 @@
 import "./Tile.css";
 
-function Tile({ index, player_a, player_b, onClick, traps  }) {
+function Tile({ index, player_a, player_b, onClick, traps, phase  }) {
 
     const row = Math.floor(index / 10);    // giving tiles number 
     const col = index % 10;
@@ -18,10 +18,12 @@ function Tile({ index, player_a, player_b, onClick, traps  }) {
     const trap = traps.find(
         trap => trap.x === col && trap.y === row);
 
+    const showTrap = trap && (phase === "TRAP_PLACEMENT" || phase === "MEMORIZE");
+
     return (
         <div className ={` tile ${player === 'A' ? 'player' : ''} 
                                 ${player === 'B' ? 'enemy' : ''}
-                                ${trap ? 'trap': ''}`}
+                                ${showTrap ? 'trap' : ''}`}
                             onClick={() => onClick(row, col)}>
             {player}
         </div>

@@ -5,6 +5,7 @@ from backend.app.websocket.handlers import handle_message
 from backend.app.auth.jwt import decode_access_token
 from backend.rooms.manager import manager
 
+import asyncio
 
 router = APIRouter(tags=["WebSocket"])
 
@@ -79,7 +80,29 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
                 })
 
     except WebSocketDisconnect:
+
+        print(f"PLAYER {user_id} DISCONNECTED")
+
         await connection_manager.disconnect(
             room_code,
             user_id
         )
+
+        asyncio.create_task(
+            reconnect_handler(room_code, user_id)
+        )
+
+
+
+async def reconnect_handler(room_code, user_id):
+    print(f"WAITING FOR PLAYER {user_id} TO RECONNECT")
+
+    await asyncio.sleep(60)
+
+    if user_id not in connection_manager.connections:
+
+        print(f"PLAYER {user_id} DID NOT RECONNECT")
+
+    else:
+        print(f"PLAYER {user_id} RECONNECTED")
+

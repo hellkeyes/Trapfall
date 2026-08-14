@@ -23,6 +23,8 @@ function Game(){
 
     const [phaseEndsAt, setPhaseEndsAt] = useState(null);
 
+    const [phase, setPhase] = useState("TRAP_PLACEMENT");
+
     const myPlayerSide = players.current_turn;
 
     useEffect(() => {
@@ -55,7 +57,9 @@ function Game(){
                 });
 
                 setTraps(data.traps);
-
+                setPhase(data.phase);
+                
+                console.log("GAME STATE DEADLINE:", data.phase_ends_at);
                 setPhaseEndsAt(data.phase_ends_at);
 
                 return;
@@ -120,6 +124,14 @@ function Game(){
                 alert(data.message);
             }
 
+            if (data.type === "PHASE_CHANGED") {
+                setPhase(data.phase);
+                setPhaseEndsAt(data.phase_ends_at);
+            }
+
+            if (data.phase === "MOVEMENT") {
+                setTraps([]);
+            }
 
             }
 
@@ -237,9 +249,9 @@ function Game(){
 
                 <div className="game-info">
 
-                    <span>ROOM : TRAP-ABCD</span>
+                    <span>ROOM : {roomCode}</span>
                     
-                    <span>PHASE : TRAP PLACEMENT</span>
+                    <span>PHASE : {phase} </span>
 
                     {/* <span>TIMER : {timer}</span> */}
 
@@ -256,7 +268,8 @@ function Game(){
                                     player_a={players.player_a}
                                     player_b={players.player_b}
                                     onClick={handleTileClick}
-                                    traps={traps}   />             // giving index so react knows which tile changes
+                                    traps={traps}
+                                    phase={phase}   />             // giving index so react knows which tile changes
                             ))
                         }
                     </div>
@@ -268,7 +281,7 @@ function Game(){
                         <div className="sidebar-box">
 
                             <div className="sidebar-title">
-                                PLAYER
+                                You are: {players.you_are}
                             </div>
 
                             <div className="sidebar-text">
@@ -289,7 +302,7 @@ function Game(){
                             </div>
 
                             <div className="sidebar-text">
-                                Remaining : 5 / 5
+                                Placed : {traps.length}
                             </div>
 
                             {/* <div className="sidebar-text">
@@ -306,7 +319,12 @@ function Game(){
                             </div>
 
                             <div className="sidebar-text">
-                                Place your traps.
+                                    {phase === "TRAP_PLACEMENT"
+                                        ? "Place your traps."
+                                        : phase === "MEMORIZE"
+                                        ? "Memorize your traps. They will disappear soon."
+                                        : "Get ready to move!"
+                                    }
                             </div>
 
                         </div>
@@ -319,10 +337,25 @@ function Game(){
                             </div>
 
                             <div className="timer">
-                                {timer}
+                                {phase === 'MOVEMENT' ? 'NA': timer}
                             </div>
 
                         </div>
+
+
+                        {/* <div className="sidebar-box">
+
+                            <div className="sidebar-title">
+                                ROOM CODE
+                            </div>
+
+                            <div className="timer">
+                                {timer}
+                            </div>
+
+                        </div> */}
+
+
 
                     </div>
 

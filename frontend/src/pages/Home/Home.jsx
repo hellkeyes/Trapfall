@@ -41,7 +41,13 @@ function Home() {
             const response = await joinRoom(roomCode, token)
 
             if(response.ok){
-                navigate(`/rooms/${roomCode}`);
+                const data = await response.json();
+
+                if (data.message === "Reconnected") {
+                    navigate(`/rooms/${roomCode}/game`);
+                } else {
+                    navigate(`/rooms/${roomCode}`);
+                }
             }
             else {
             const error = await response.json();
