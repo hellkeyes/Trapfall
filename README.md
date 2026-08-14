@@ -1,6 +1,6 @@
 # TRAPFALL
 
-TRAPFALL is a real-time multiplayer strategy game where two players move across a 10 × 10 board, place hidden traps, and try to reach the opponent's side without losing all their lives.
+TRAPFALL is a real-time two-player strategy game where two players move across a 10 × 10 board, place hidden traps, and try to reach the opponent's side without losing all their lives.
 
 
 ### About
@@ -52,7 +52,7 @@ The backend manages the actual game state and sends changes to both players thro
 
 **V1**
 
-The core game and real-time multiplayer functionality are complete.
+The core game and real-time two-player functionality are complete.
 
 I plan to improve the project further with responsive/mobile controls and additional visual polish, but those improvements are not required for the current version.
 
