@@ -55,7 +55,6 @@ function Game(){
             );
 
             socketRef.current.onopen = () => {
-                console.log("WebSocket connected");
 
                 socketRef.current.send(JSON.stringify({
                     type: "GET_GAME_STATE"
@@ -64,10 +63,8 @@ function Game(){
 
             socketRef.current.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log("RECEIVED FROM SERVER:", data);
 
             if (data.type === "GAME_STATE") {
-                console.log("SETTING INITIAL PLAYERS");
                 setPlayers({
                     player_a: data.player_a,
                     player_b: data.player_b,
@@ -78,7 +75,6 @@ function Game(){
                 setTraps(data.traps);
                 setPhase(data.phase);
 
-                console.log("GAME STATE DEADLINE:", data.phase_ends_at);
                 setPhaseEndsAt(data.phase_ends_at);
 
                 return;
@@ -86,16 +82,9 @@ function Game(){
 
             if (data.type === "PLAYER_MOVED") {
 
-                console.log("PLAYER MOVED ID:", data.player_id);
-
                 setPlayers(prev => {
 
-                    console.log("CURRENT A:", prev.player_a);
-                    console.log("CURRENT B:", prev.player_b);
-
                     if (data.player_id === prev.player_a.id) {
-
-                        console.log("MATCHED PLAYER A");
 
                         return {
                             ...prev,
@@ -110,8 +99,6 @@ function Game(){
 
                     if (data.player_id === prev.player_b.id) {
 
-                        console.log("MATCHED PLAYER B");
-
                         return {
                             ...prev,
                             player_b: {
@@ -123,7 +110,6 @@ function Game(){
                         };
                     }
 
-                    console.log("NO PLAYER MATCH");
 
                     return prev;
                 });
@@ -151,16 +137,9 @@ function Game(){
                     setTriggeredTrap(null);
                 }, 1000);
 
-                console.log("PLAYER MOVED ID:", data.player_id);
-
                 setPlayers(prev => {
 
-                    console.log("CURRENT A:", prev.player_a);
-                    console.log("CURRENT B:", prev.player_b);
-
                     if (data.player_id === prev.player_a.id) {
-
-                        console.log("MATCHED PLAYER A");
 
                         return {
                             ...prev,
@@ -175,8 +154,6 @@ function Game(){
 
                     if (data.player_id === prev.player_b.id) {
 
-                        console.log("MATCHED PLAYER B");
-
                         return {
                             ...prev,
                             player_b: {
@@ -189,8 +166,6 @@ function Game(){
                     }
 
                     self.traps.remove(triggered_trap)
-                    
-                    console.log("NO PLAYER MATCH");
 
                     return prev;
                 });               
@@ -219,7 +194,6 @@ function Game(){
             }
 
             if (data.type === "ROOM_TERMINATED") {
-                console.log("ROOM TERMINATED RECEIVED");
                 navigate('/home');
                 return;
             }
@@ -234,11 +208,9 @@ function Game(){
             }
 
             socketRef.current.onclose = () => {
-                console.log("WebSocket disconnected");
             };
 
             return () => {
-                console.log("GAME JSX UNMOUNTING — CLOSING SOCKET");
                 socketRef.current.close();
             };
         
@@ -264,7 +236,6 @@ function Game(){
 
     useEffect(() => {                 // see which key is pressed
         function handleKeyDown(event) {
-            console.log(event.key);
             let direction = null;
 
              switch (event.key) {
@@ -290,7 +261,6 @@ function Game(){
 
             if ( socketRef.current &&
                 socketRef.current.readyState === WebSocket.OPEN) {
-                    console.log("SENDING:", direction);
 
                     socketRef.current.send(JSON.stringify({
                         type: "MOVE",
@@ -313,11 +283,7 @@ function Game(){
 
     useEffect(() => {
 
-        console.log("TIMER EFFECT RAN");
-        console.log("PHASE ENDS AT:", phaseEndsAt);
-
         if (!phaseEndsAt) {
-            console.log("NO PHASE END TIME YET");
             return;
         }
 
@@ -327,8 +293,6 @@ function Game(){
             const remaining = Math.ceil(
                 phaseEndsAt - Date.now() / 1000
             );
-
-            console.log("REMAINING:", remaining);
 
             setTimer(Math.max(0, remaining));
 

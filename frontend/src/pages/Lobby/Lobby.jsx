@@ -37,7 +37,7 @@ function Lobby(){
             }
         }
         catch(error){
-            console.error(error);
+            showNotification("Unable to start the game.");
         }
     }
 
@@ -60,25 +60,22 @@ function Lobby(){
                 }
             }
             catch(error){
-                console.error(error);
+                showNotification("Unable to get the game.");
             }
         }
 
         fetchRoom();
 
         // WebSocket connection
-        console.log("SETTING UP SOCKET");
         const socket = new WebSocket(
             `ws://127.0.0.1:8000/ws/rooms/${roomCode}?token=${token}`
         );
 
         socket.onopen = () => {
-            console.log("WebSocket connected");
         };
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log("Received:", data);
 
             if(data.type === "ROOM_UPDATED"){
                 setRoom(data.room);
@@ -90,7 +87,6 @@ function Lobby(){
         };
 
         socket.onclose = () => {
-            console.log("WebSocket disconnected");
         };
 
         return () => {

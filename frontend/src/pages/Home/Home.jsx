@@ -32,7 +32,6 @@ function Home() {
     async function handleCreateRoom(){
         try {
             const token = localStorage.getItem('token');
-            console.log(token);
             const response = await createRoom(token);
 
             if(response.ok){
@@ -41,7 +40,7 @@ function Home() {
             }
         }
          catch(error){
-            console.error(error);
+            showNotification('Cannot create room!');
         }
     }
 
@@ -65,7 +64,7 @@ function Home() {
             }
         }
          catch(error){
-            console.error(error);
+            showNotification('Cannot join room!');
         }
     }
 

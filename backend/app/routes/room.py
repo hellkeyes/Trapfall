@@ -59,7 +59,7 @@ async def start_room(room_code: str, current_user: User = Depends(get_current_us
         raise HTTPException(status_code=404, detail="Room doesn't exist.")
 
     if game.player_a is None or game.player_b is None:
-        return {"message": "Both players must join before the game can start."}
+        raise HTTPException(status_code=400, detail="Both players must join before the game can start.")
 
     if game.phase != "WAITING":
         raise HTTPException( status_code=400, detail="Game has already started")

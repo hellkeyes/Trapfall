@@ -34,7 +34,6 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
 
 @router.websocket("/ws/rooms/{room_code}")
 async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
-    print("WEBSOCKET HIT", room_code)
     payload = decode_access_token(token)
 
     if payload is None:
@@ -69,13 +68,10 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
         while True:
             data = await websocket.receive_json()
 
-            print("RECEIVED:", data)
-
             try:
                 await handle_message(user_id, data, websocket)
 
             except Exception as e:
-                print("MESSAGE ERROR:", repr(e))
 
                 await websocket.send_json({
                     "type": "ERROR",
@@ -83,9 +79,6 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
                 })
 
     except WebSocketDisconnect:
-        print(f"PLAYER {user_id} DISCONNECTED")
-        print("REMOVING SOCKET:", user_id)
-
         await connection_manager.disconnect(room_code, user_id)
         
         asyncio.create_task(reconnect_handler(room_code, user_id))
@@ -93,14 +86,10 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
 
 
 async def reconnect_handler(room_code, user_id):   # handles if a player joins again within 60 sec
-    print(f"WAITING FOR PLAYER {user_id} TO RECONNECT")
 
     await asyncio.sleep(60)   # can change the timer if wanted 
 
     if user_id not in connection_manager.connections:
-        print(f"PLAYER {user_id} DID NOT RECONNECT")
-        print("CURRENT CONNECTIONS:", connection_manager.connections)
-        print("CURRENT ROOM CONNECTIONS:", connection_manager.room_connections)
         await connection_manager.broadcast_to_room(
             room_code,
             {

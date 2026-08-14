@@ -40,24 +40,16 @@ class ConnectionManager:  #only job here is to maintain connection
 
     async def broadcast_to_room(self, room_code, message):
 
-        print("Broadcasting to:", room_code)
-
-        print(self.room_connections)
-
         if room_code not in self.room_connections:
-            print("No room found")
             return
 
         for user_id, websocket in self.room_connections[room_code].items():
 
-            print("Sending to", user_id)
-
             try:
                 await websocket.send_json(message)
-                print("Success")
 
             except Exception as e:
-                print("FAILED:", e)
+                await self.disconnect(room_code, user_id) # disconeet 
 
 
 connection_manager = ConnectionManager()

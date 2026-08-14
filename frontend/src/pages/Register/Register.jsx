@@ -47,7 +47,6 @@ function Register() {
         }
 
         catch(error) {
-            console.error(error);
             showNotification('server error.');
         }
     }

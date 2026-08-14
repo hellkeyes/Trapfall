@@ -41,12 +41,10 @@ class Game:
         self.phase = "TRAP_PLACEMENT"
         self.current_turn = "A"
         self.phase_ends_at = time.time() + 60
-        print("NEW DEADLINE:", self.phase_ends_at)
         asyncio.create_task(self.phase_timer())
 
 
     def place_trap(self, user_id, data):
-        print("PLACE TRAP DATA:", data)
         if self.phase != "TRAP_PLACEMENT":
             raise InvalidPhase("You cannot place traps now.")
 
@@ -205,17 +203,12 @@ class Game:
         }
 
     async def phase_timer(self):
-        print("PHASE TIMER STARTED")
-        print("INITIAL DEADLINE:", self.phase_ends_at)
-
         while True:
             if self.phase_ends_at is not None and time.time() >= self.phase_ends_at:
 
                 if self.phase == "TRAP_PLACEMENT":
                     self.phase = "MEMORIZE"
                     self.phase_ends_at = time.time() + 15
-
-                    print("PHASE TIMER:", self.phase_ends_at)
 
                     await connection_manager.broadcast_to_room(
                         self.room_code,
@@ -229,8 +222,6 @@ class Game:
                 elif self.phase == "MEMORIZE":
                     self.phase = "MOVEMENT"
                     self.phase_ends_at = None
-
-                    print("PHASE TIMER:", self.phase_ends_at)
 
                     await connection_manager.broadcast_to_room(
                         self.room_code,

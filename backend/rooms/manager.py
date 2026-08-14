@@ -63,7 +63,6 @@ class Manager:
         
         self.rooms.pop(room_code, None)
 
-        print(f"ROOM {room_code} DELETED")
 
 
 class RoomNotFoundError(Exception):
