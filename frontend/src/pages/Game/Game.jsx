@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import Notification from "../../components/Notification/Notification";
 
 function Game(){
+    const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();    
     const { roomCode } = useParams();
     const tiles = Array.from({length:100});
@@ -51,7 +52,7 @@ function Game(){
             const token = localStorage.getItem("token");
 
             socketRef.current = new WebSocket(
-                `ws://127.0.0.1:8000/ws/rooms/${roomCode}?token=${token}`
+                `${API_URL.replace("http", "ws")}/ws/rooms/${roomCode}?token=${token}`
             );
 
             socketRef.current.onopen = () => {

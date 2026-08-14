@@ -7,6 +7,7 @@ import "./Lobby.css";
 import Notification from "../../components/Notification/Notification";
 
 function Lobby(){
+    const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
     const { roomCode } = useParams();
     const [room, setRoom] = useState(null);
@@ -68,8 +69,9 @@ function Lobby(){
 
         // WebSocket connection
         const socket = new WebSocket(
-            `ws://127.0.0.1:8000/ws/rooms/${roomCode}?token=${token}`
+            `${API_URL.replace("http", "ws")}/ws/rooms/${roomCode}?token=${token}`
         );
+
 
         socket.onopen = () => {
         };
