@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef  } from "react";
 import "./Game.css";
 import Tile from "../../components/Tile/Tile";
+import Button from "../../components/Button/Button";
 
 
 function Game(){
@@ -18,6 +19,8 @@ function Game(){
     });      
     
     const [traps, setTraps] = useState([]); // collect all traps
+
+    const [winner, setWinner] = useState(null); 
 
     const [timer, setTimer] = useState(60);
 
@@ -167,6 +170,11 @@ function Game(){
 
                     return prev;
                 });               
+            }
+
+            if (data.type === "GAME_WON") {
+                setWinner(data.winner);
+                return;
             }
 
             if (data.type === "ERROR") {
@@ -426,6 +434,30 @@ function Game(){
                 </div>
 
             </div>
+
+            {winner && (
+                <div className="winner-overlay">
+                    <div className="winner-dialog">
+
+                        <div className="winner-warning">GAME COMPLETE</div>
+
+                        {/* <div className="winner-icon">
+                            🏆
+                        </div> */}
+
+                        <h2>PLAYER {winner} WINS</h2>
+
+                        <div className="winner-line"></div>
+
+                        <p>THE OPPONENT HAS BEEN DEFEATED</p>
+
+                        <button onClick={() => navigate("/home")}>
+                            RETURN HOME
+                        </button>
+
+                    </div>
+                </div>
+            )}
 
         </div>
     );

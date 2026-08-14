@@ -97,3 +97,111 @@
     text-align:center;
     text-shadow:2px 2px #05080d;
 }
+.winner-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(8, 13, 20, 0.88);
+
+    z-index: 1000;
+}
+
+.winner-dialog {
+    width: 420px;
+
+    background: #151f2b;
+
+    border: 4px solid #61a5fa;
+
+    padding: 32px;
+
+    text-align: center;
+
+    box-shadow:
+        8px 8px 0 #05080d,
+        12px 12px 0 #425164;
+}
+
+.winner-warning {
+    font-family: "Press Start 2P", monospace;
+    font-size: 8px;
+
+    color: #b9dcff;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 22px;
+}
+
+.winner-icon {
+    font-size: 48px;
+    margin-bottom: 14px;
+
+    text-shadow:
+        3px 3px #05080d;
+}
+
+.winner-dialog h2 {
+    font-family: "Press Start 2P", monospace;
+    font-size: 18px;
+
+    color: #61a5fa;
+
+    margin: 10px 0 18px;
+
+    text-shadow:
+        2px 2px #05080d;
+}
+
+.winner-line {
+    height: 3px;
+    width: 100%;
+
+    background: #425164;
+
+    margin: 20px 0;
+}
+
+.winner-dialog p {
+    font-family: monospace;
+    font-size: 14px;
+
+    color: white;
+
+    margin-bottom: 26px;
+}
+
+.winner-dialog button {
+    font-family: "Press Start 2P", monospace;
+    font-size: 8px;
+
+    color: #080d14;
+    background: #61a5fa;
+
+    border: 3px solid #61a5fa;
+
+    padding: 14px 18px;
+
+    cursor: pointer;
+
+    box-shadow:
+        4px 4px 0 #05080d;
+
+    transition: 0.1s;
+}
+
+.winner-dialog button:hover {
+    background: #b9dcff;
+    border-color: #b9dcff;
+}
+
+.winner-dialog button:active {
+    transform: translate(3px, 3px);
+
+    box-shadow:
+        1px 1px 0 #05080d;
+}

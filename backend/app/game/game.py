@@ -126,7 +126,7 @@ class Game:
         player.position = (new_x, new_y)
         player.path.append(player.position)
 
-        triggered_trap = None
+        triggered_trap = None     # check if any trap got triggered 
 
         for trap in self.traps:
             if ( trap["x"] == new_x and trap["y"] == new_y):
@@ -149,6 +149,21 @@ class Game:
                     "y": player.position[1]
                     },
                 "current_turn": self.current_turn
+            }
+
+        winner = None       # check winning condition 
+         
+        if player_side == "A" and player.position[0] == 9:
+            winner = "A"
+
+        elif player_side == "B" and player.position[0] == 0:
+            winner = "B"
+
+        if winner:
+            return {
+                "type": "GAME_WON",
+                "winner": player_side,
+                "player_id": user_id
             }
 
         return {
