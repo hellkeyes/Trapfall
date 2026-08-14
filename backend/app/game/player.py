@@ -16,4 +16,4 @@ class Player:
 
         self.alive = True
 
-        self.history = []
+        self.path = []

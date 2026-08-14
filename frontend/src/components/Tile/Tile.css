@@ -45,9 +45,26 @@
     border: 1px solid #ff6666;
 }
 
-.tile.revealed{
+.tile.explosion {
+    animation: explode 1s ease-out;
+    font-size: 2rem;
+}
 
-    background:#425164;
+@keyframes explode {
+    0% {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+
+    30% {
+        transform: scale(1.4);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
 }
 
 .tile.player {

@@ -21,8 +21,6 @@ class Game:
 
         self.phase_ends_at = None
 
-        # self.turn_started_at = None
-
         self.winner = None
 
     
@@ -93,6 +91,11 @@ class Game:
 
         if player_side != self.current_turn:
             raise InvalidMove("Not your turn")
+        
+        if self.current_turn == "A":
+            self.current_turn = "B"
+        else:
+            self.current_turn = "A"
 
         direction = data["direction"]
 
@@ -121,11 +124,32 @@ class Game:
             raise InvalidMove("Outside board")
 
         player.position = (new_x, new_y)
+        player.path.append(player.position)
 
-        if self.current_turn == "A":
-            self.current_turn = "B"
-        else:
-            self.current_turn = "A"
+        triggered_trap = None
+
+        for trap in self.traps:
+            if ( trap["x"] == new_x and trap["y"] == new_y):
+                triggered_trap = trap
+                break
+
+        if triggered_trap:
+            if len(player.path) > 2:
+                player.path.pop()
+                player.path.pop()
+                player.position = player.path[-1]
+
+            self.traps.remove(triggered_trap)
+
+            return {
+                "type": "TRAP_TRIGGERED",
+                "player_id": user_id,
+                "position": {
+                    "x": player.position[0],
+                    "y": player.position[1]
+                    },
+                "current_turn": self.current_turn
+            }
 
         return {
         "type": "PLAYER_MOVED",

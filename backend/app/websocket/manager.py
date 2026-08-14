@@ -30,11 +30,13 @@ class ConnectionManager:  #only job here is to maintain connection
             if user_id in self.room_connections[room_code]:
                 del self.room_connections[room_code][user_id]
     
+
     async def send_to_user(self, user_id, message: dict):
         websocket = self.connections.get(user_id)
 
         if websocket:
             await websocket.send_json(message)
+
 
     async def broadcast_to_room(self, room_code, message):
 

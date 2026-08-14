@@ -23,6 +23,8 @@ function Game(){
 
     const [phaseEndsAt, setPhaseEndsAt] = useState(null);
 
+    const [triggeredTrap, setTriggeredTrap] = useState(null);
+
     const [phase, setPhase] = useState("TRAP_PLACEMENT");
 
     const myPlayerSide = players.current_turn;
@@ -120,6 +122,53 @@ function Game(){
                 ]) 
             }
 
+            if (data.type === 'TRAP_TRIGGERED') {
+                setTriggeredTrap(data.position);
+                setTimeout(() => {
+                    setTriggeredTrap(null);
+                }, 1000);
+
+                console.log("PLAYER MOVED ID:", data.player_id);
+
+                setPlayers(prev => {
+
+                    console.log("CURRENT A:", prev.player_a);
+                    console.log("CURRENT B:", prev.player_b);
+
+                    if (data.player_id === prev.player_a.id) {
+
+                        console.log("MATCHED PLAYER A");
+
+                        return {
+                            ...prev,
+                            player_a: {
+                                ...prev.player_a,
+                                x: data.position.x,
+                                y: data.position.y
+                            }
+                        };
+                    }
+
+                    if (data.player_id === prev.player_b.id) {
+
+                        console.log("MATCHED PLAYER B");
+
+                        return {
+                            ...prev,
+                            player_b: {
+                                ...prev.player_b,
+                                x: data.position.x,
+                                y: data.position.y
+                            }
+                        };
+                    }
+
+                    console.log("NO PLAYER MATCH");
+
+                    return prev;
+                });               
+            }
+
             if (data.type === "ERROR") {
                 alert(data.message);
             }
@@ -144,6 +193,7 @@ function Game(){
                 navigate("/home");
                 return;
             }
+
 
             }
 
@@ -282,7 +332,8 @@ function Game(){
                                     player_b={players.player_b}
                                     onClick={handleTileClick}
                                     traps={traps}
-                                    phase={phase}   />             // giving index so react knows which tile changes
+                                    phase={phase}
+                                    triggeredTrap={triggeredTrap} />             // giving index so react knows which tile changes
                             ))
                         }
                     </div>
