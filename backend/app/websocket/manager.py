@@ -2,8 +2,8 @@ from fastapi import WebSocket
 
 class ConnectionManager:  #only job here is to maintain connection
     def __init__(self):
-        self.connections = {}
-        self.room_connections = {}
+        self.connections = {}  #user id and their websocket
+        self.room_connections = {}  # room code -> their user and respective websocket
 
     async def connect(self, user_id, websocket, room_code):
         await websocket.accept()

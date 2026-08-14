@@ -48,8 +48,23 @@ class Manager:
         else:
             raise RoomNotFoundError(f"User is not currently in any room.")
 
+    
+    def delete_room(self, room_code):
+        game = self.rooms.get(room_code)
 
-       
+        if game is None:
+            return
+
+        if game.player_a:
+            self.user_to_room.pop(game.player_a.user_id, None)
+
+        if game.player_b:
+            self.user_to_room.pop(game.player_b.user_id, None)
+        
+        self.rooms.pop(room_code, None)
+
+        print(f"ROOM {room_code} DELETED")
+
 
 class RoomNotFoundError(Exception):
     """Raised when a requested room does not exist."""

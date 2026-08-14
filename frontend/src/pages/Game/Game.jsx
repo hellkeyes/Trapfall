@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef  } from "react";
 import "./Game.css";
 import Tile from "../../components/Tile/Tile";
 
 
 function Game(){
-
+    const navigate = useNavigate();    
     const { roomCode } = useParams();
     const tiles = Array.from({length:100});
     const socketRef = useRef(null);
@@ -58,7 +58,7 @@ function Game(){
 
                 setTraps(data.traps);
                 setPhase(data.phase);
-                
+
                 console.log("GAME STATE DEADLINE:", data.phase_ends_at);
                 setPhaseEndsAt(data.phase_ends_at);
 
@@ -133,6 +133,18 @@ function Game(){
                 setTraps([]);
             }
 
+            if (data.type === "ROOM_TERMINATED") {
+                console.log("ROOM TERMINATED RECEIVED");
+                navigate('/home');
+                return;
+            }
+
+            if (data.type === "ROOM_NOT_FOUND") {
+                alert(data.message);
+                navigate("/home");
+                return;
+            }
+
             }
 
             socketRef.current.onclose = () => {
@@ -140,6 +152,7 @@ function Game(){
             };
 
             return () => {
+                console.log("GAME JSX UNMOUNTING — CLOSING SOCKET");
                 socketRef.current.close();
             };
         

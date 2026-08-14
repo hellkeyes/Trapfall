@@ -46,7 +46,10 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
     game = manager.rooms.get(room_code)
 
     if game is None:
-        await websocket.close()
+        await websocket.send_json({
+            "type": "ROOM_NOT_FOUND",
+            "message": "This room no longer exists."
+        })
         return
 
     # Check player belongs to room
@@ -80,29 +83,45 @@ async def rooms_socket(websocket: WebSocket, room_code: str, token: str):
                 })
 
     except WebSocketDisconnect:
-
         print(f"PLAYER {user_id} DISCONNECTED")
+        print("REMOVING SOCKET:", user_id)
 
-        await connection_manager.disconnect(
-            room_code,
-            user_id
-        )
-
-        asyncio.create_task(
-            reconnect_handler(room_code, user_id)
-        )
+        await connection_manager.disconnect(room_code, user_id)
+        
+        asyncio.create_task(reconnect_handler(room_code, user_id))
 
 
 
-async def reconnect_handler(room_code, user_id):
+async def reconnect_handler(room_code, user_id):   # handles if a player joins again within 60 sec
     print(f"WAITING FOR PLAYER {user_id} TO RECONNECT")
 
-    await asyncio.sleep(60)
+    await asyncio.sleep(60)   # can change the timer if wanted 
 
     if user_id not in connection_manager.connections:
-
         print(f"PLAYER {user_id} DID NOT RECONNECT")
+        print("CURRENT CONNECTIONS:", connection_manager.connections)
+        print("CURRENT ROOM CONNECTIONS:", connection_manager.room_connections)
+        await connection_manager.broadcast_to_room(
+            room_code,
+            {
+                "type": "ROOM_TERMINATED",
+                "message": "Opponent did not reconnect."
+            }
+        )
 
-    else:
-        print(f"PLAYER {user_id} RECONNECTED")
+        game = manager.rooms.get(room_code)   # cleaning up dead websockets
 
+        if game:
+            if game.player_a:
+                await connection_manager.disconnect(
+                    room_code,
+                    game.player_a.user_id
+                )
+
+            if game.player_b:
+                await connection_manager.disconnect(
+                    room_code,
+                    game.player_b.user_id
+                )
+
+        manager.delete_room(room_code)  # clean up the room and its room connection to user
