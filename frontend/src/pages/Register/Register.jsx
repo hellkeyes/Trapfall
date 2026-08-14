@@ -2,20 +2,30 @@ import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/api";
 import Button from "../../components/Button/Button";
+import Notification from "../../components/Notification/Notification";
 import "./Register.css";
 
 function Register() {
-  const navigate = useNavigate();
-  
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
+    
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [notification, setNotification] = useState(null);
+
+    function showNotification(message) {
+        setNotification(message);
+
+        setTimeout(() => {
+            setNotification(null);
+        }, 2000);
+    }
 
     async function handleRegister(){
         if (password !== confirmPassword){
-            alert('Passwords do not match');
+            showNotification('Passwords do not match');
             return;
         }
 
@@ -27,23 +37,24 @@ function Register() {
             });
 
             if (response.ok) {
-                alert('Registration successful!');
+                showNotification('Registration successful!');
                 navigate("/")
             }
             else {
                 const error = await response.json();
-                alert(error.detail);
+                showNotification(error.detail);
             }
         }
 
         catch(error) {
             console.error(error);
-            alert('server error.');
+            showNotification('server error.');
         }
     }
 
     return (
         <div className="register-container">
+            <Notification message={notification} />
 
             <div className="register-card">
                 <h1>TRAPFALL</h1>

@@ -205,3 +205,14 @@
     box-shadow:
         1px 1px 0 #05080d;
 }
+
+.sidebar-text {
+    color: white;
+    font-family: monospace;
+    font-size: 15px;
+    margin: 10px 0;
+}
+
+.sidebar-text .heart {
+    color: #61a5fa;
+}

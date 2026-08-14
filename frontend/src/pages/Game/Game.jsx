@@ -3,13 +3,22 @@ import { useState, useEffect, useRef  } from "react";
 import "./Game.css";
 import Tile from "../../components/Tile/Tile";
 import Button from "../../components/Button/Button";
-
+import Notification from "../../components/Notification/Notification";
 
 function Game(){
     const navigate = useNavigate();    
     const { roomCode } = useParams();
     const tiles = Array.from({length:100});
     const socketRef = useRef(null);
+    const [notification, setNotification] = useState(null);
+
+    function showNotification(message) {
+        setNotification(message);
+
+        setTimeout(() => {
+            setNotification(null);
+        }, 2000);
+    }
 
     const [players, setPlayers] = useState({
         player_a: {id: null, x: 0, y: 0 },  //position of a
@@ -23,6 +32,11 @@ function Game(){
     const [winner, setWinner] = useState(null); 
 
     const [timer, setTimer] = useState(60);
+
+    const [lives, setLives] = useState({
+        A: 3,
+        B: 3
+    });
 
     const [phaseEndsAt, setPhaseEndsAt] = useState(null);
 
@@ -89,7 +103,8 @@ function Game(){
                                 ...prev.player_a,
                                 x: data.position.x,
                                 y: data.position.y
-                            }
+                            },
+                            current_turn: data.current_turn
                         };
                     }
 
@@ -103,7 +118,8 @@ function Game(){
                                 ...prev.player_b,
                                 x: data.position.x,
                                 y: data.position.y
-                            }
+                            },
+                            current_turn: data.current_turn
                         };
                     }
 
@@ -111,6 +127,10 @@ function Game(){
 
                     return prev;
                 });
+
+                if (data.lives) {
+                    setLives(data.lives);
+                }
             }
 
             if (data.type === "TRAP_PLACED") {
@@ -148,7 +168,8 @@ function Game(){
                                 ...prev.player_a,
                                 x: data.position.x,
                                 y: data.position.y
-                            }
+                            },
+                            current_turn: data.current_turn
                         };
                     }
 
@@ -162,10 +183,13 @@ function Game(){
                                 ...prev.player_b,
                                 x: data.position.x,
                                 y: data.position.y
-                            }
+                            },
+                            current_turn: data.current_turn
                         };
                     }
 
+                    self.traps.remove(triggered_trap)
+                    
                     console.log("NO PLAYER MATCH");
 
                     return prev;
@@ -173,12 +197,16 @@ function Game(){
             }
 
             if (data.type === "GAME_WON") {
+                if (data.lives) {
+                    setLives(data.lives);
+                }
+
                 setWinner(data.winner);
                 return;
             }
 
             if (data.type === "ERROR") {
-                alert(data.message);
+                showNotification(data.message);
             }
 
             if (data.type === "PHASE_CHANGED") {
@@ -197,7 +225,7 @@ function Game(){
             }
 
             if (data.type === "ROOM_NOT_FOUND") {
-                alert(data.message);
+                showNotification(data.message);
                 navigate("/home");
                 return;
             }
@@ -313,6 +341,7 @@ function Game(){
 
   return (
         <div className="game-container">
+            <Notification message={notification} />
 
             <div className="game-card">
 
@@ -357,7 +386,7 @@ function Game(){
                             </div>
 
                             <div className="sidebar-text">
-                                Lives : ♥ ♥ ♥
+                                Lives : <span className="heart"> {players.you_are ? "♥".repeat(lives[players.you_are]) : ""}</span>
                             </div>
 
                             <div className="sidebar-text">
@@ -374,7 +403,7 @@ function Game(){
                             </div>
 
                             <div className="sidebar-text">
-                                Placed : {traps.length}
+                                Placed : {traps.length} / 8
                             </div>
 
                             {/* <div className="sidebar-text">

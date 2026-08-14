@@ -1,0 +1,56 @@
+.game-notification {
+    position: fixed;
+
+    top: 30px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: #151f2b;
+
+    border: 3px solid #61a5fa;
+
+    padding: 14px 20px;
+
+    color: #b9dcff;
+
+    font-family: "Press Start 2P", monospace;
+
+    font-size: 9px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    box-shadow:
+        5px 5px 0 #05080d,
+        7px 7px 0 #425164;
+
+    z-index: 2000;
+
+    animation: notification-in 0.15s ease-out;
+}
+
+.notification-icon {
+    color: #61a5fa;
+
+    font-size: 14px;
+}
+
+.notification-message {
+    line-height: 1.5;
+}
+
+@keyframes notification-in {
+
+    from {
+        transform: translate(-50%, -10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+
+}

@@ -91,11 +91,6 @@ class Game:
 
         if player_side != self.current_turn:
             raise InvalidMove("Not your turn")
-        
-        if self.current_turn == "A":
-            self.current_turn = "B"
-        else:
-            self.current_turn = "A"
 
         direction = data["direction"]
 
@@ -134,6 +129,26 @@ class Game:
                 break
 
         if triggered_trap:
+
+            if self.current_turn == "A":
+                self.current_turn = "B"
+            else:
+                self.current_turn = "A"
+
+            player.lives -= 1
+
+            if player.lives <= 0:
+                winner = "B" if player_side == "A" else "A"
+                return {
+                    "type": "GAME_WON",
+                    "winner": winner,
+                    "reason": "ELIMINATED",
+                    "lives": {
+                        "A": self.player_a.lives,
+                        "B": self.player_b.lives
+                    }
+                }                   
+                    
             if len(player.path) > 2:
                 player.path.pop()
                 player.path.pop()
@@ -148,7 +163,11 @@ class Game:
                     "x": player.position[0],
                     "y": player.position[1]
                     },
-                "current_turn": self.current_turn
+                "current_turn": self.current_turn,
+                "lives": {
+                    "A": self.player_a.lives,
+                    "B": self.player_b.lives
+                }
             }
 
         winner = None       # check winning condition 
@@ -166,6 +185,11 @@ class Game:
                 "player_id": user_id
             }
 
+        if self.current_turn == "A":
+            self.current_turn = "B"
+        else:
+            self.current_turn = "A"
+
         return {
         "type": "PLAYER_MOVED",
         "player_id": user_id,
@@ -173,7 +197,11 @@ class Game:
             "x": player.position[0],
             "y": player.position[1]
             },
-        "current_turn": self.current_turn
+        "current_turn": self.current_turn,
+        "lives": {
+            "A": self.player_a.lives,
+            "B": self.player_b.lives
+        }
         }
 
     async def phase_timer(self):

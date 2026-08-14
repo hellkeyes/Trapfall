@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { createRoom, joinRoom } from '../../services/api';
 import Button from "../../components/Button/Button";
+import Notification from "../../components/Notification/Notification";
 import "./Home.css";
 
 
@@ -10,6 +11,15 @@ function Home() {
     const navigate = useNavigate();
     const [roomCode, setRoomCode] = useState("");
     const [createdRoomCode, setCreatedRoomCode] = useState("");
+    const [notification, setNotification] = useState(null);
+
+    function showNotification(message) {
+        setNotification(message);
+
+        setTimeout(() => {
+            setNotification(null);
+        }, 2000);
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -51,7 +61,7 @@ function Home() {
             }
             else {
             const error = await response.json();
-            alert(error.detail);
+            showNotification(error.detail);
             }
         }
          catch(error){
@@ -63,6 +73,7 @@ function Home() {
     return (
 
         <div className="home-container">
+            <Notification message={notification} />
 
             <div className="home-card">
 

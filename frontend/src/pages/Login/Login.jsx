@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { loginUser } from '../../services/api';
 import Button from "../../components/Button/Button";
+import Notification from "../../components/Notification/Notification";
 import "./Login.css";
 
 
@@ -11,6 +12,16 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [notification, setNotification] = useState(null);
+
+  function showNotification(message) {
+      setNotification(message);
+
+      setTimeout(() => {
+          setNotification(null);
+      }, 2000);
+  }
 
   async function handleLogin(){
     try{
@@ -22,22 +33,23 @@ function Login() {
       if (response.ok) {
           const data = await response.json();
           localStorage.setItem("token", data.access_token);
-          alert('Login successful!');
+          showNotification('Login successful!');
           navigate("/home");
         }
         else {
           const error = await response.json();
-          alert(error.detail);
+          showNotification(error.detail);
         }
     }
     catch(error) {
         console.error(error);
-        alert('server error.');
+        showNotification('server error.');
       }
     } 
 
   return (
     <div className="login-container">
+      <Notification message={notification} />
 
       <div className="login-card">
 
