@@ -27,12 +27,6 @@ async def join_room(room_code: str, current_user: User = Depends(get_current_use
         raise HTTPException(status_code=404, detail="Room doesn't exist")
     # Existing player reconnecting
 
-    print(
-        "JOIN DEBUG:",
-        "current_user =", current_user.id,
-        "player_a =", game.player_a.user_id if game.player_a else None,
-        "player_b =", game.player_b.user_id if game.player_b else None
-    )
     if (game.player_a and game.player_a.user_id == current_user.id):
         return {"message": "Reconnected"}
 
