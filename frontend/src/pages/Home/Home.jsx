@@ -51,6 +51,7 @@ function Home() {
 
             if(response.ok){
                 const data = await response.json();
+                console.log("JOIN RESPONSE:", data);
 
                 if (data.message === "Reconnected") {
                     navigate(`/rooms/${roomCode}/game`);
