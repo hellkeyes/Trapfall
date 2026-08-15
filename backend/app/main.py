@@ -10,7 +10,7 @@ app = FastAPI(title='Trap Game')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173"
+        "https://trapfall.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
