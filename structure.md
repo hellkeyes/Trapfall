@@ -14,8 +14,6 @@ Board
 ├── size
 └── tiles
 
-
-
 Game
 ├── room_code
 ├── player_a
