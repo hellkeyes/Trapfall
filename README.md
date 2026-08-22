@@ -4,6 +4,24 @@ TrapFall is a two-player browser-based strategy game built with React and FastAP
 
 The project was built to learn how a real-time multiplayer application works, including authentication, APIs, WebSockets, game state, PostgreSQL, migrations, and deployment.
 
+### Screenshots
+
+#### Lobby
+
+![TrapFall Lobby](./screenshots/lobby.png)
+
+#### Game
+
+![TrapFall Game](./screenshots/game.png)
+
+### How to Play
+
+Create a room and share the room code with another player. Once both players are in the lobby, the game can be started.
+
+Players first place their traps on the board. After the placement phase, traps are hidden and players take turns moving toward the opponent's side.
+
+Stepping on a trap costs a life and moves the player backward two tiles. Losing all three lives eliminates the player. The first player to reach the opponent's side wins.
+
 ### Tech Stack
 
 React, JavaScript, Vite, Python, FastAPI, WebSockets, SQLAlchemy, PostgreSQL, Alembic, JWT, and Argon2.
@@ -16,7 +34,7 @@ Users can register and log in, create rooms, join rooms using a room code, play 
 
 The backend manages the game state while WebSockets are used for real-time lobby and game updates.
 
-The database stores user information and Alembic is used for migrations.
+PostgreSQL stores persistent user data and Alembic is used for database migrations.
 
 ### Limitations
 
@@ -28,8 +46,10 @@ Active rooms and games are currently stored in backend memory, so the applicatio
 
 Reconnect handling is implemented, but disconnect and reconnect edge cases are still basic.
 
-There may also be bugs that I have not discovered yet. Some edge cases, especially around WebSockets, reconnects, simultaneous actions, and deployment/network conditions, have not been fully tested.
+There may also be bugs that I have not discovered yet. Some edge cases, especially around WebSockets, simultaneous actions, and deployment/network conditions, have not been fully tested.
 
 ### Project Status
 
-TrapFall is deployed and playable, but it is still an ongoing project. The goal is to continue improving the architecture, reliability, game logic, and overall user experience as I find problems and learn from them.
+TrapFall is deployed and playable, but it is still an ongoing project. The goal was not to build a huge or highly polished game. I wanted to build something small enough to finish while getting hands-on experience with React, FastAPI, WebSockets, authentication, databases, real-time state, and deployment.
+
+Future work will focus on improving reliability, handling edge cases, and addressing limitations as they are discovered.
