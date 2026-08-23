@@ -43,6 +43,8 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:password@localhost:5432/trap_game_test
           TEST_DATABASE_URL: postgresql://postgres:password@localhost:5432/trap_game_test
+          SECRET_KEY: test-secret-key-for-ci
+          ALGORITHM: HS256
         run: pytest tests/ -v
 
       - name: Run linter
