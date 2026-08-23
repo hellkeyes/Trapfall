@@ -1,12 +1,10 @@
 name: CI
 
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 
 jobs:
   test:
@@ -27,25 +25,24 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-  - name: Set up Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pytest httpx ruff
 
-  - name: Install dependencies
-    run: |
-      pip install -r backend/requirements.txt
-      pip install pytest httpx ruff
+      - name: Run tests
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:password@localhost:5432/trap_game_test
+        run: pytest tests/ -v
 
-  - name: Run tests
-    env:
-      TEST_DATABASE_URL: postgresql://postgres:password@localhost:5432/trap_game_test
-    run: pytest tests/ -v
-
-  - name: Run linter
-    run: ruff check backend/
+      - name: Run linter
+        run: ruff check backend/
