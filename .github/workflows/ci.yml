@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
+          pip install -r requirements.txt
           pip install pytest httpx ruff
 
       - name: Run tests
