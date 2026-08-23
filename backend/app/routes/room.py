@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
-from backend.app.models.user import User
 from backend.app.auth.dependencies import get_current_user
 from backend.app.game.player import Player
-from backend.rooms.manager import manager
+from backend.app.models.user import User
 from backend.app.websocket.manager import connection_manager
+from backend.rooms.manager import manager
 
 router = APIRouter(prefix="/rooms", tags=["Rooms"])
 

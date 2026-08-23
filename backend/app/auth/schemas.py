@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
+
 class RegisterRequest(BaseModel):
     username: str
     email: str

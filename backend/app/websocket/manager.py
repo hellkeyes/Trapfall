@@ -1,4 +1,6 @@
-from fastapi import WebSocket
+from starlette.websockets import WebSocketDisconnect
+from websockets.exceptions import ConnectionClosed
+
 
 class ConnectionManager:  #only job here is to maintain connection
     def __init__(self):
@@ -26,8 +28,7 @@ class ConnectionManager:  #only job here is to maintain connection
         if user_id in self.connections:
             del self.connections[user_id]
 
-        if room_code in self.room_connections:
-            if user_id in self.room_connections[room_code]:
+        if room_code in self.room_connections and user_id in self.room_connections[room_code]:
                 del self.room_connections[room_code][user_id]
     
 
@@ -48,7 +49,7 @@ class ConnectionManager:  #only job here is to maintain connection
             try:
                 await websocket.send_json(message)
 
-            except Exception as e:
+            except (WebSocketDisconnect, ConnectionClosed, RuntimeError):
                 await self.disconnect(room_code, user_id) # disconeet 
 
 

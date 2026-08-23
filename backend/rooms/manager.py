@@ -1,5 +1,6 @@
-import string
 import secrets
+import string
+
 from backend.app.game.game import Game
 
 
@@ -46,7 +47,7 @@ class Manager:
             game = self.rooms[room_code]
             return game
         else:
-            raise RoomNotFoundError(f"User is not currently in any room.")
+            raise RoomNotFoundError("User is not currently in any room.")
 
     
     def delete_room(self, room_code):
@@ -67,7 +68,6 @@ class Manager:
 
 class RoomNotFoundError(Exception):
     """Raised when a requested room does not exist."""
-    pass
 
 
 

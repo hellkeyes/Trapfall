@@ -1,5 +1,6 @@
-from backend.rooms.manager import manager
 from backend.app.websocket.manager import connection_manager
+from backend.rooms.manager import manager
+
 
 async def handle_message(user_id, data, websocket):
     message_type = data['type']

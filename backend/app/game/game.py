@@ -1,7 +1,9 @@
-from backend.app.game.board import Board
-import time
 import asyncio
+import time
+
+from backend.app.game.board import Board
 from backend.app.websocket.manager import connection_manager
+
 
 class Game:
     def __init__(self, room_code):
@@ -34,7 +36,7 @@ class Game:
             self.player_b.position = (9, 9)
             self.player_b.starting_position = (9, 9)
         else:
-            raise RoomIsOccupied(f'Game room is full.')
+            raise RoomIsOccupied('Game room is full.')
 
 
     def start_game(self):
@@ -85,7 +87,7 @@ class Game:
             player_side = "B"
 
         else:
-            raise Exception("Player not found")
+            raise PlayerNotFoundError("Player not found")
 
         if player_side != self.current_turn:
             raise InvalidMove("Not your turn")
@@ -241,4 +243,7 @@ class InvalidMove(Exception):
     pass
 
 class InvalidPhase(Exception):
+    pass
+
+class PlayerNotFoundError(Exception):
     pass

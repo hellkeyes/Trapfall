@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from backend.app.auth.routes import router as auth_router
 from backend.app.routes.room import router as room_router
 from backend.app.websocket.routes import router as websocket_router
